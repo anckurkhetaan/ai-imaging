@@ -71,7 +71,7 @@ def front_prompt(category: str, product_index: int) -> str:
     """Front view prompt with rotating poses."""
     footwear = get_footwear(category)
     pose = _rotate_pose(FRONT_POSES, product_index)
-    return f"{pose}, wearing {category.lower()} with {footwear} same footwear for all views, {BASE_STUDIO}"
+    return f"{pose}, wearing {category.lower()} with {footwear}, preserve exact original {category.lower()} front design, bottoms and footwear flexible but consistent across all three views, {BASE_STUDIO}"
 
 
 # ===================================================================
@@ -82,7 +82,10 @@ def back_prompt_with_input(category: str, product_index: int) -> str:
     """Back view when we have actual back image input."""
     footwear = get_footwear(category)
     pose = _rotate_pose(BACK_POSES, product_index)
-    return f"{pose}, wearing {category.lower()} with {footwear}, preserve exact original back design from product image, do not modify back details, do not add embellishments, replicate back precisely as shown in input, same footwear for all views, {BASE_STUDIO}"
+    
+    # Category-specific design preservation
+    return f"{pose}, wearing {category.lower()} with {footwear}, preserve exact original {category.lower()} back design from product image, do not modify {category.lower()} back details, bottoms and footwear flexible but consistent across all three views, {BASE_STUDIO}"
+
 
 def back_prompt_no_input(category: str, product_index: int) -> str:
     """Back view when NO back image (prevent hallucination)."""
@@ -99,4 +102,4 @@ def side_prompt(category: str, product_index: int) -> str:
     """Side/angled view prompt with rotating poses."""
     footwear = get_footwear(category)
     pose = _rotate_pose(SIDE_POSES, product_index)
-    return f"{pose}, wearing {category.lower()} with {footwear} same footwear for all views, {BASE_STUDIO}"
+    return f"{pose}, wearing {category.lower()} with {footwear}, preserve exact original {category.lower()} design, bottoms and footwear flexible but consistent across all three views, {BASE_STUDIO}"
