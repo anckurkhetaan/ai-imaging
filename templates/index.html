@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashn AI Pipeline Monitor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-start {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-start:hover:not(:disabled) {
+            background: #059669;
+        }
+        
+        .btn-stop {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-stop:hover:not(:disabled) {
+            background: #dc2626;
+        }
+        
+        .status-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .status-idle { background: #e5e7eb; color: #374151; }
+        .status-running { background: #dbeafe; color: #1e40af; }
+        .status-stopped { background: #fee2e2; color: #991b1b; }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #2563eb);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .logs-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .logs-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #111827;
+        }
+        
+        .logs-container {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 6px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            color: #d1d5db;
+        }
+        
+        .log-info { color: #60a5fa; }
+        .log-warning { color: #fbbf24; }
+        .log-error { color: #f87171; }
+        
+        .current-product {
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Fashn AI Pipeline Monitor</h1>
+        
+        <div class="controls">
+            <button class="btn btn-start" id="startBtn" onclick="startPipeline()">
+                ▶ Start Pipeline
+            </button>
+            <button class="btn btn-stop" id="stopBtn" onclick="stopPipeline()" disabled>
+                ⏹ Stop Pipeline
+            </button>
+        </div>
+        
+        <div class="status-card">
+            <div class="status-badge" id="statusBadge">IDLE</div>
+            
+            <div id="currentProduct"></div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%">0%</div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">Total Products</div>
+                    <div class="stat-value" id="totalProducts">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">✓ Successful</div>
+                    <div class="stat-value" id="successCount" style="color: #10b981;">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">✗ Failed</div>
+                    <div class="stat-value" id="failCount" style="color: #ef4444;">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Current</div>
+                    <div class="stat-value" id="currentIndex">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="logs-card">
+            <div class="logs-header">📋 Live Logs</div>
+            <div class="logs-container" id="logsContainer">
+                <div class="log-entry">Waiting to start...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let updateInterval;
+        
+        async function startPipeline() {
+            try {
+                const response = await fetch('/api/start', { method: 'POST' });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('startBtn').disabled = true;
+                    document.getElementById('stopBtn').disabled = false;
+                    startUpdates();
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                alert('Error starting pipeline: ' + error);
+            }
+        }
+        
+        async function stopPipeline() {
+            try {
+                const response = await fetch('/api/stop', { method: 'POST' });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('stopBtn').disabled = true;
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                alert('Error stopping pipeline: ' + error);
+            }
+        }
+        
+        function startUpdates() {
+            updateInterval = setInterval(updateStatus, 1000);
+        }
+        
+        async function updateStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                
+                // Update status badge
+                const badge = document.getElementById('statusBadge');
+                badge.textContent = data.status.toUpperCase();
+                badge.className = 'status-badge status-' + data.status;
+                
+                // Update buttons
+                if (data.status === 'idle' || data.status === 'stopped') {
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('stopBtn').disabled = true;
+                    if (updateInterval) clearInterval(updateInterval);
+                }
+                
+                // Update current product
+                const currentProductDiv = document.getElementById('currentProduct');
+                if (data.current_product) {
+                    currentProductDiv.innerHTML = `<div class="current-product">📦 Processing: <strong>${data.current_product}</strong></div>`;
+                } else {
+                    currentProductDiv.innerHTML = '';
+                }
+                
+                // Update progress
+                const progress = data.total_products > 0 
+                    ? Math.round((data.current_index / data.total_products) * 100) 
+                    : 0;
+                const progressBar = document.getElementById('progressBar');
+                progressBar.style.width = progress + '%';
+                progressBar.textContent = progress + '%';
+                
+                // Update stats
+                document.getElementById('totalProducts').textContent = data.total_products;
+                document.getElementById('successCount').textContent = data.success_count;
+                document.getElementById('failCount').textContent = data.fail_count;
+                document.getElementById('currentIndex').textContent = data.current_index;
+                
+                // Update logs
+                const logsContainer = document.getElementById('logsContainer');
+                logsContainer.innerHTML = data.logs.slice(-20).map(log => {
+                    const levelClass = 'log-' + log.level.toLowerCase();
+                    return `<div class="log-entry ${levelClass}">${log.message}</div>`;
+                }).join('');
+                logsContainer.scrollTop = logsContainer.scrollHeight;
+                
+            } catch (error) {
+                console.error('Error updating status:', error);
+            }
+        }
+        
+        // Initial status check
+        updateStatus();
+    </script>
+</body>
+</html>
