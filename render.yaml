@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: fashn-ai-pipeline
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: FASHN_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GSHEET_SPREADSHEET_ID
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: MODEL_1_URL
+        sync: false
+      - key: MODEL_2_URL
+        sync: false
+      - key: MODEL_3_URL
+        sync: false
+      - key: MODEL_4_URL
+        sync: false
+      - key: MODEL_5_URL
+        sync: false
+      - key: MODEL_6_URL
+        sync: false
+      - key: MODEL_7_URL
+        sync: false
+      - key: MODEL_8_URL
+        sync: false
+      - key: MODEL_9_URL
+        sync: false
+      - key: MODEL_10_URL
+        sync: false
+      - key: MODEL_11_URL
+        sync: false
+      - key: MODEL_12_URL
+        sync: false
