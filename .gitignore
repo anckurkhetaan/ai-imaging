@@ -1,0 +1,41 @@
+# Environment variables
+.env
+
+# Google Sheets credentials
+credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+pipeline.log
+run_log.csv
+
+# Outputs
+outputs/
+model_library/
+reposed_models/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cloudinary cache
+.cloudinary/
