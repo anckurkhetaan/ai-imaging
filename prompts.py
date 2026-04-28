@@ -26,7 +26,7 @@ BACK_POSES = [
 ]
 
 SIDE_POSES = [
-    "three-quarter angled view 45 degrees, walking motion mid-step, arms swinging naturally",
+    "three-quarter angled view 45 degrees, both arms at sides, natural stance",
     "three-quarter angled view 45 degrees, hand on hip, weight shifted, confident",
     "three-quarter angled view 45 degrees, arms crossed, leaning back slightly, casual",
     "three-quarter angled view 45 degrees, one hand touching face, editorial pose",
@@ -35,16 +35,16 @@ SIDE_POSES = [
 
 # Footwear by category
 FOOTWEAR = {
-    "dress": "heels",
-    "top": "white sneakers",
-    "blouse": "white sneakers",
-    "shirt": "white sneakers",
-    "tee": "white sneakers",
-    "pant": "white sneakers",
-    "short": "white sneakers",
-    "jean": "white sneakers",
-    "trouser": "white sneakers",
-    "skirt": "heels",
+    "dresses": "heels",
+    "tops": "white sneakers",
+    "blouses": "white sneakers",
+    "shirts": "white sneakers",
+    "tees": "white sneakers",
+    "pants": "white sneakers",
+    "shorts": "white sneakers",
+    "jeans": "white sneakers",
+    "trousers": "white sneakers",
+    "skirts": "heels",
     "default": "appropriate footwear"
 }
 
